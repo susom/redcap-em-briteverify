@@ -1,0 +1,88 @@
+{
+  "name": "Brite Verify",
+
+  "namespace":"Stanford\\BriteVerify",
+
+  "description": "BriteVerify Email Verification Service",
+
+  "versions": [
+    { "0.1": "Initial" }
+  ],
+
+  "authors": [
+    {
+      "name": "Andrew Martin",
+      "email": "andy123@stanford.edu",
+      "institution": "Stanford University"
+    }
+  ],
+
+  "permissions": [
+    "redcap_survey_page_top",
+    "redcap_data_entry_form_top"
+  ],
+
+  "links": {
+    "control-center": [
+    ],
+    "project": [
+      {
+        "name": "Verify Test",
+        "icon": "gear",
+        "url": "verify_ajax.php"
+      }
+    ]
+  },
+
+  "system-settings": [
+  ],
+
+  "project-settings": [
+    {
+      "key": "instructions",
+      "name": "This external module will perform <a href='https://www.briteverify.com' target='_blank'><div class='btn btn-xs btn-primary'>Brite Verify Email Verification</div></a> on an email field in your project.",
+      "type": "descriptive"
+    },
+    {
+      "key": "api-key",
+      "name": "<b>Bright Verify API Key</b>",
+      "required": true,
+      "type": "text"
+    },
+    {
+      "key": "email-fields",
+      "name": "Email Fields to Enable",
+      "required": false,
+      "type": "sub_settings",
+      "repeatable":true,
+      "sub_settings":[
+        {
+          "key": "email_field",
+          "name": "Email Field",
+          "required": true,
+          "type": "field-list"
+        },
+        {
+          "key": "fail-unknown-error",
+          "name": "Mark unknown/error responses as failures.<br><i>If this is active AND hard validation is active, a user could get 'stuck' and be unable to submit</i>",
+          "type": "checkbox"
+        },
+        {
+          "key": "hard-validation",
+          "name": "Only allow a user to submit if the field is a valid email",
+          "type": "checkbox"
+        }
+      ]
+    }
+  ],
+
+  "unused-settings": [
+    {
+      "key": "validation-options",
+      "name": "Validation Options",
+      "required": false,
+      "type": "text"
+    }
+  ]
+
+}
