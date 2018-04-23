@@ -51,56 +51,63 @@ class BriteVerify extends \ExternalModules\AbstractExternalModule
 
         if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-            // // Valid email
-            // // https://support.briteverify.com/briteverify-verification-apis/real-time-email-api
-            // // Possible Status Values:  Invalid, Valid, Unknown, Accept All
-            // $url = "https://bpi.briteverify.com/emails.json?address=" . $email . "&apikey=" . $this->apiKey;
-            //
-            // $q = http_get($url);
-            // // self::log("RAW GET", $q);
-            // $q = json_decode($q,true);
-            //
-            // $status = isset($q['status']) ? strtolower($q['status']) : NULL;
-            // // self::log("Raw Status: " . $status);
-            // if (!empty($q['errors'])) $status = "errors";
-            //
+            // Valid email
+            // https://support.briteverify.com/briteverify-verification-apis/real-time-email-api
+            // Possible Status Values:  Invalid, Valid, Unknown, Accept All
+            $url = "https://bpi.briteverify.com/emails.json?address=" . $email . "&apikey=" . $this->apiKey;
 
-            $status = "unknown";
+            $q = http_get($url);
+            // self::log("RAW GET", $q);
+            $q = json_decode($q,true);
+
+            $status = isset($q['status']) ? strtolower($q['status']) : NULL;
+            // self::log("Raw Status: " . $status);
+            if (!empty($q['errors'])) $status = "errors";
+
+
+            self::log("RESULT", $q);
 
 
             $result = false;
             $failUnknownError = $this->emailFields[$field_name]['fail-unknown-error'];
+            $message = "";
 
             switch ($status) {
                 case "errors":
                     self::log("Errors from BrightVerify Service", $q, "ERROR");
                     $result = true;
+                    $message = "Error during verification";
                     if ($failUnknownError) $result = false;
                     break;
                 case "unknown":
+                    $message = "Unknown";
                     $result = true;
                     if ($failUnknownError) $result = false;
                     break;
                 case "valid":
+                    $message = "Valid Email";
                     $result = true;
                     break;
                 case "accept_all":
+                    $message = "Valid Email (all)";
                     $result = true;
                     break;
                 case "invalid":
+                    $message = "Invalid Email";
                     $result = false;
                     break;
                 default:
+                    $message = "Unknown Response";
                     self::log("Unknown status response: $email", $q, "ERROR");
                     $result = true;
             }
-            self::log("[$field_name]=$email returned $status");
+
+            self::log("[$field_name]=$email returned $status, result " . (int) $result);
         }
 
         // LOG EVENT
         REDCap::logEvent("Bright Verify: " . ($result ? "Pass" : "Fail"),str_replace("&",",\n", urldecode(http_build_query($q))), "", $record, $event_id);
-
-        return $result;
+        return array($result, $message);
     }
 
 

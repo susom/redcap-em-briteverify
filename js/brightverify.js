@@ -111,10 +111,11 @@ BrightVerify.resize = function() {
     });
 };
 
-BrightVerify.changeStatus = function(field_name, status, msg) {
+// Valid status are error, success, verifying, unknown
+BrightVerify.changeStatus = function(field_name, status, message) {
 
     // Create the overlay if it doesn't exist
-    BrightVerify.log("Change status of " + field_name + " to " + status + " with message: " + msg);
+    BrightVerify.log("Change status of " + field_name + " to " + status + " with message: " + message);
 
     if (BrightVerify.fields[field_name] === undefined) {
         BrightVerify.log(field_name + " is NOT a BV Field!");
@@ -142,7 +143,7 @@ BrightVerify.changeStatus = function(field_name, status, msg) {
                 .removeClass('-success')
                 .removeClass('-verifying')
                 .addClass('-error');
-            bv_status.text(msg);
+            bv_status.text(message);
             break;
         case "success":
             bv_tip
@@ -153,7 +154,7 @@ BrightVerify.changeStatus = function(field_name, status, msg) {
                 .removeClass('-error')
                 .removeClass('-verifying')
                 .addClass('-success');
-            bv_status.text(msg);
+            bv_status.text(message);
             break;
         case "verifying":
             bv_tip
@@ -164,7 +165,7 @@ BrightVerify.changeStatus = function(field_name, status, msg) {
                 .removeClass('-success')
                 .removeClass('-error')
                 .addClass('-verifying');
-            bv_status.text(msg);
+            bv_status.text(message);
             break;
         case "unknown":
             bv_tip
@@ -175,7 +176,7 @@ BrightVerify.changeStatus = function(field_name, status, msg) {
                 .removeClass('-success')
                 .removeClass('-error')
                 .removeClass('-verifying');
-            bv_status.text(msg);
+            bv_status.text(message);
             break;
     }
 
@@ -279,16 +280,27 @@ BrightVerify.validate = function(args) {
             })
                 .done(function (field_name,email) {
                     return function(data) {
+                        data = JSON.parse(data);
                         // var field = field_name;
+                        var success = data.success;
+                        var message = data.message;
+
+                        console.log("Success: " , success, "Message" , message, data, field_name, email);
                         BrightVerify.log("Post done with field ", field_name, "and data", data);
-                        if (data == 1) {
-                            // success
-                            BrightVerify.changeStatus(field_name, "success", "Verified");
-                        } else {
-                            BrightVerify.changeStatus(field_name, "error", "Invalid Email");
-                            // BrightVerify.fields[field_name].status = "error";
-                            // BrightVerify.fields[field_name].statusMsg = "Invalid Email";
-                        };
+
+                        var result = success ? "success" : "error";
+                        BrightVerify.changeStatus(field_name, result, message);
+
+                        // if (success) {
+                        //     console.log ("Success true");
+                        //     // success
+                        //     BrightVerify.changeStatus(field_name, "success", message);
+                        // } else {
+                        //     console.log ("Success false");
+                        //     BrightVerify.changeStatus(field_name, "error", message);
+                        //     // BrightVerify.fields[field_name].status = "error";
+                        //     // BrightVerify.fields[field_name].statusMsg = "Invalid Email";
+                        // };
 
                         // Cache last value verified
                         var input = $('input[name="'+field_name+'"]');

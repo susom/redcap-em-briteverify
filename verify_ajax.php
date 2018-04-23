@@ -9,11 +9,20 @@ $record     = @$_POST['record'];
 $event_id   = @$_POST['event_id'];
 $field_name = @$_POST['field'];
 
-$result = (int) $module->verifyEmail($field_name, $email, $record, $event_id);
+// $result = (int)
 
-$module::log("Incoming: $email / result: $result");
+list($success, $message) = $module->verifyEmail($field_name, $email, $record, $event_id);
 
-echo $result;
+$module::log("Incoming: $email / result: " . ($success ? "true" : "false") . " / " . $message);
+
+$data = array(
+    "success" => $success,
+    "message" => $message
+);
+
+header("application/json");
+echo json_encode($data);
+//$result;
 exit();
 
 
