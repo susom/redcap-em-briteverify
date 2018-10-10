@@ -137,7 +137,7 @@ class BriteVerify extends \ExternalModules\AbstractExternalModule
         // Embed the javascript
         echo "<script src='" . $this->getUrl("js/brightverify.js",true,true) . "'></script>";
         echo "<script>BrightVerify.fields = " . json_encode($instrument_fields) . ";</script>";
-        echo "<script>BrightVerify.url = " . json_encode( $this->getUrl("verify_ajax",true,true) . "&pid=" . $project_id) .  ";</script>";
+        echo "<script>BrightVerify.url = " . json_encode( $this->getUrl("verify_ajax",true,true) . "&NOAUTH&pid=" . $project_id) .  ";</script>";
         echo "<script>BrightVerify.record = " . json_encode($record) . ";</script>";
         echo "<script>BrightVerify.event_id = " . json_encode($event_id) . ";</script>";
         // echo "<script>BrightVerify.session_id = " . json_encode($_SESSION) . ";</script>";
