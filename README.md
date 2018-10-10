@@ -18,7 +18,6 @@ DOCS TBD
  * Optionally, you can configure custom instructions and error message text on a per-project basis (or leave blank for defaults).  
  
 #### Example
-![Example REDCaptcha Survey](docs/example.png)
  
 *Last tested on v8.3.2*
  

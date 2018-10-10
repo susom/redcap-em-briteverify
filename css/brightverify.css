@@ -37,7 +37,7 @@ div.bv_tip.-error .bv_logo, div.bv_tip.-success .bv_logo {
 div.bv_overlay{
     display:none;
     position:absolute;
-    height:0px;
+    height:0;
     line-height:24px;
     vertical-align:middle;
 }

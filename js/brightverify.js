@@ -7,6 +7,9 @@ BrightVerify.log = function() {
 };
 
 BrightVerify.init = function() {
+
+    // BrightVerify.log("Init");
+
     var fields = BrightVerify.fields;
 
     // Set up each field
@@ -89,11 +92,10 @@ BrightVerify.resize = function() {
         var input = options.input;
         var overlay = options.overlay;
 
-        var ipos    = input.position();
+        var ipos    = input.offset();
         var iwidth  = input.width()+12;
         var itop    = ipos.top;
         var ileft   = ipos.left;
-
 
         var tipWidth = $('.bv_tip',overlay).width();
         var tipLeft  = $('.bv_tip',overlay).position().left;
